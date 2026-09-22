@@ -4,8 +4,8 @@ import { Providers } from "./providers";
 import { plusJakartaSans } from "./fonts";
 
 export const metadata: Metadata = {
-  title: "SaaS Tool",
-  description: "Capa de documentación contextual para RevOps",
+  title: "Inlay",
+  description: "Injected context for inherited tools.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

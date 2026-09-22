@@ -1,7 +1,7 @@
 "use client";
 
 import * as stylex from "@stylexjs/stylex";
-import { colorVars, radiusVars } from "@astryxdesign/core/theme/tokens.stylex";
+import { colorVars, radiusVars, spacingVars } from "@astryxdesign/core/theme/tokens.stylex";
 
 export type FieldStatus = "documentado" | "sin-documentar" | "sensible";
 
@@ -15,7 +15,7 @@ const styles = stylex.create({
   base: {
     display: "inline-flex",
     alignItems: "center",
-    gap: 6,
+    gap: spacingVars["--spacing-1-5"],
     paddingBlock: 5,
     paddingInline: 10,
     borderRadius: radiusVars["--radius-full"],

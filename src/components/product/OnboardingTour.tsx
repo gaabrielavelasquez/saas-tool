@@ -132,8 +132,8 @@ export function OnboardingTour({
 const restartStyles = stylex.create({
   button: {
     position: "fixed",
-    right: 24,
-    bottom: 84,
+    right: spacingVars["--spacing-6"],
+    bottom: 84, // pegado arriba del launcher (48px + 24px de margen), sin token equivalente para ese offset compuesto
     zIndex: 55,
     display: "flex",
     alignItems: "center",

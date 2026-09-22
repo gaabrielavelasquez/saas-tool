@@ -2,7 +2,7 @@
 
 import { Fragment, useState } from "react";
 import * as stylex from "@stylexjs/stylex";
-import { colorVars, radiusVars } from "@astryxdesign/core/theme/tokens.stylex";
+import { colorVars, radiusVars, spacingVars } from "@astryxdesign/core/theme/tokens.stylex";
 import { Text, Heading } from "@astryxdesign/core/Text";
 import { TabList, Tab } from "@astryxdesign/core/TabList";
 import { Divider } from "@astryxdesign/core/Divider";
@@ -11,7 +11,7 @@ const styles = stylex.create({
   page: {
     display: "flex",
     flexDirection: "column",
-    gap: 20,
+    gap: spacingVars["--spacing-5"],
   },
   // El breadcrumb es texto real de navegación, no contenido "deshabilitado"
   // — usa el mismo token que ya está endurecido a AAA (~7.45:1), no el de
@@ -22,7 +22,7 @@ const styles = stylex.create({
   headingGroup: {
     display: "flex",
     flexDirection: "column",
-    gap: 4,
+    gap: spacingVars["--spacing-1"],
   },
   card: {
     backgroundColor: colorVars["--color-background-surface"],

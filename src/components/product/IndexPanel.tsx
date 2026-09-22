@@ -62,6 +62,24 @@ const styles = stylex.create({
     // de marca de 3px, en vez de oscurecer el fondo del host.
     boxShadow: shadowVars["--shadow-high"],
     zIndex: 50,
+    // Microinteracción de apertura/cierre: desliza + funde en vez de
+    // aparecer/desaparecer de golpe. El padre (LauncherAndIndexPanel)
+    // mantiene el panel montado unos ms extra al cerrar para que esta
+    // transición de salida llegue a verse, no solo la de entrada.
+    transitionProperty: "transform, opacity",
+    transitionDuration: {
+      default: "180ms",
+      "@media (prefers-reduced-motion: reduce)": "0s",
+    },
+    transitionTimingFunction: "ease-in-out",
+    transform: {
+      default: "translateX(0)",
+      ":is([data-open=false])": "translateX(24px)",
+    },
+    opacity: {
+      default: 1,
+      ":is([data-open=false])": 0,
+    },
   },
   accentEdge: {
     position: "absolute",
@@ -93,14 +111,14 @@ const styles = stylex.create({
   },
   chips: {
     display: "flex",
-    gap: 6,
+    gap: spacingVars["--spacing-1-5"],
   },
   chip: {
     display: "flex",
     alignItems: "center",
     gap: 5,
     paddingBlock: 3.5,
-    paddingInline: 8,
+    paddingInline: spacingVars["--spacing-2"],
     borderRadius: radiusVars["--radius-full"],
     borderWidth: 1.5,
     borderStyle: "solid",
@@ -184,7 +202,7 @@ const styles = stylex.create({
   skeletonLeft: {
     display: "flex",
     flexDirection: "column",
-    gap: 8,
+    gap: spacingVars["--spacing-2"],
   },
   emptyWrapper: {
     display: "flex",
@@ -206,7 +224,7 @@ const styles = stylex.create({
     height: 44,
     borderRadius: 22,
     backgroundColor: colorVars["--color-background-muted"],
-    marginBottom: 4,
+    marginBottom: spacingVars["--spacing-1"],
   },
   emptyBar: {
     height: 2.5,
@@ -268,6 +286,7 @@ export function IndexPanel({
   entries,
   onClose,
   onSelect,
+  isOpen = true,
   isLoading = false,
   initialQuery = "",
   initialStatuses = [],
@@ -276,6 +295,11 @@ export function IndexPanel({
   onClose: () => void;
   /** Si se pasa, cada resultado se vuelve clickeable y navega a ese campo. */
   onSelect?: (entry: IndexEntry) => void;
+  /** Controla la transición de entrada/salida (desliza + funde). Por
+   * defecto `true` — las pantallas estáticas de referencia que montan y
+   * desmontan el panel entero sin pasar esto siguen viéndolo "abierto"
+   * de entrada, sin cambios de comportamiento para ellas. */
+  isOpen?: boolean;
   isLoading?: boolean;
   initialQuery?: string;
   initialStatuses?: FieldStatus[];
@@ -323,7 +347,7 @@ export function IndexPanel({
     activeStatuses.size === 1 ? [...activeStatuses][0] : null;
 
   return (
-    <div {...stylex.props(styles.panel)}>
+    <div data-open={isOpen} {...stylex.props(styles.panel)}>
       <div {...stylex.props(styles.accentEdge)} />
 
       <div {...stylex.props(styles.header)}>

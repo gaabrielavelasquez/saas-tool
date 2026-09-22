@@ -27,7 +27,7 @@ const styles = stylex.create({
   headerLeft: {
     display: "flex",
     flexDirection: "column",
-    gap: 6,
+    gap: spacingVars["--spacing-1-5"],
   },
   prompt: {
     color: colorVars["--color-text-secondary"],

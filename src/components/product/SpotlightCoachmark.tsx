@@ -20,7 +20,7 @@ const ARROW_MARGIN = 20; // keeps the arrow off the card's rounded corners
 const styles = stylex.create({
   ring: {
     position: "fixed",
-    borderRadius: 999,
+    borderRadius: radiusVars["--radius-full"],
     borderWidth: 2,
     borderStyle: "solid",
     borderColor: colorVars["--color-accent"],

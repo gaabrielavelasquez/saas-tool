@@ -23,7 +23,7 @@ const styles = stylex.create({
   stat: {
     display: "flex",
     flexDirection: "column",
-    gap: 2,
+    gap: spacingVars["--spacing-0-5"],
   },
   percent: {
     fontSize: 34,
@@ -40,12 +40,12 @@ const styles = stylex.create({
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-end",
-    gap: 6,
+    gap: spacingVars["--spacing-1-5"],
   },
   chip: {
     display: "flex",
     alignItems: "center",
-    gap: 6,
+    gap: spacingVars["--spacing-1-5"],
   },
   dot: {
     width: 6,
@@ -57,7 +57,7 @@ const styles = stylex.create({
   sinDocumentarDot: { backgroundColor: colorVars["--color-icon-disabled"] },
   bar: {
     display: "flex",
-    gap: 2,
+    gap: spacingVars["--spacing-0-5"],
     height: 8,
     width: "100%",
     borderRadius: radiusVars["--radius-full"],

@@ -2,14 +2,19 @@
 
 import { useState } from "react";
 import * as stylex from "@stylexjs/stylex";
-import { colorVars, shadowVars } from "@astryxdesign/core/theme/tokens.stylex";
+import {
+  colorVars,
+  radiusVars,
+  shadowVars,
+  spacingVars,
+} from "@astryxdesign/core/theme/tokens.stylex";
 import { X } from "lucide-react";
 
 const styles = stylex.create({
   button: {
     position: "fixed",
-    right: 24,
-    bottom: 24,
+    right: spacingVars["--spacing-6"],
+    bottom: spacingVars["--spacing-6"],
     // Por encima del IndexPanel (zIndex 50): en Figma el launcher queda
     // visible sobre el panel cuando está abierto, doblando como cierre.
     zIndex: 55,
@@ -18,7 +23,7 @@ const styles = stylex.create({
     justifyContent: "center",
     width: 48,
     height: 48,
-    borderRadius: 24,
+    borderRadius: radiusVars["--radius-full"],
     border: "none",
     cursor: "pointer",
     backgroundColor: {
@@ -35,6 +40,24 @@ const styles = stylex.create({
     // lucide's X icon defaults to stroke="currentColor" — setting `color`
     // here lets the active-state icon inherit it without a raw color prop.
     color: colorVars["--color-on-accent"],
+  },
+  // Gira sutilmente al cambiar de estado (barras↔X) — la X es
+  // rotacionalmente simétrica a 90°, así que en reposo se ve igual;
+  // el giro solo se nota durante la propia transición.
+  iconWrapper: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    transitionProperty: "transform",
+    transitionDuration: {
+      default: "150ms",
+      "@media (prefers-reduced-motion: reduce)": "0s",
+    },
+    transitionTimingFunction: "ease-in-out",
+    transform: {
+      default: "rotate(0deg)",
+      ":is([data-active=true])": "rotate(90deg)",
+    },
   },
   bars: {
     display: "flex",
@@ -84,15 +107,17 @@ export function Launcher({
       onClick={handleClick}
       {...stylex.props(styles.button)}
     >
-      {active ? (
-        <X size={20} />
-      ) : (
-        <span {...stylex.props(styles.bars)}>
-          <span {...stylex.props(styles.bar, styles.barLg)} />
-          <span {...stylex.props(styles.bar, styles.barMd)} />
-          <span {...stylex.props(styles.bar, styles.barSm)} />
-        </span>
-      )}
+      <span data-active={active} {...stylex.props(styles.iconWrapper)}>
+        {active ? (
+          <X size={20} />
+        ) : (
+          <span {...stylex.props(styles.bars)}>
+            <span {...stylex.props(styles.bar, styles.barLg)} />
+            <span {...stylex.props(styles.bar, styles.barMd)} />
+            <span {...stylex.props(styles.bar, styles.barSm)} />
+          </span>
+        )}
+      </span>
     </button>
   );
 }

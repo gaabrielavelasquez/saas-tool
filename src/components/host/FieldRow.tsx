@@ -27,7 +27,7 @@ const styles = stylex.create({
   left: {
     display: "flex",
     alignItems: "center",
-    gap: 8,
+    gap: spacingVars["--spacing-2"],
   },
   dot: {
     color: colorVars["--color-text-disabled"],

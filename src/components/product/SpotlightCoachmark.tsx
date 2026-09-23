@@ -17,6 +17,23 @@ const GAP = 16;
 const ARROW_SIZE = 8;
 const ARROW_MARGIN = 20; // keeps the arrow off the card's rounded corners
 
+// Un solo lugar para la sensación de movimiento del tour entero (ring +
+// card + flecha se mueven todos juntos, a la misma velocidad) — antes
+// solo el ring tenía transición (150ms) y la card + el texto saltaban
+// de golpe a la posición/contenido del siguiente paso, lo que se sentía
+// brusco e inconsistente. Easing "standard" (Material): acelera y frena
+// suave, se siente natural en vez de mecánico.
+const MOVE_DURATION = {
+  default: "280ms",
+  "@media (prefers-reduced-motion: reduce)": "0s",
+} as const;
+const MOVE_EASING = "cubic-bezier(0.4, 0, 0.2, 1)";
+
+const fadeInContent = stylex.keyframes({
+  from: { opacity: 0, transform: "translateY(4px)" },
+  to: { opacity: 1, transform: "translateY(0)" },
+});
+
 const styles = stylex.create({
   ring: {
     position: "fixed",
@@ -31,7 +48,8 @@ const styles = stylex.create({
     pointerEvents: "none",
     zIndex: 60,
     transitionProperty: "top, left, width, height",
-    transitionDuration: "150ms",
+    transitionDuration: MOVE_DURATION,
+    transitionTimingFunction: MOVE_EASING,
   },
   card: {
     position: "fixed",
@@ -44,6 +62,24 @@ const styles = stylex.create({
     borderRadius: radiusVars["--radius-element"],
     backgroundColor: colorVars["--color-background-surface"],
     boxShadow: shadowVars["--shadow-med"],
+    transitionProperty: "top, left, bottom",
+    transitionDuration: MOVE_DURATION,
+    transitionTimingFunction: MOVE_EASING,
+  },
+  // El texto (paso/título/descripción) entra con un fundido + deslice
+  // corto en vez de reemplazarse de golpe al cambiar de paso — `key` en
+  // el uso más abajo hace que este bloque se monte de nuevo cada vez,
+  // así la animación se dispara en cada paso, no solo la primera vez.
+  content: {
+    display: "flex",
+    flexDirection: "column",
+    gap: spacingVars["--spacing-3"],
+    animationName: fadeInContent,
+    animationDuration: {
+      default: "220ms",
+      "@media (prefers-reduced-motion: reduce)": "0s",
+    },
+    animationTimingFunction: "ease-out",
   },
   arrowUp: {
     position: "fixed",
@@ -60,6 +96,9 @@ const styles = stylex.create({
     borderBottomStyle: "solid",
     borderBottomColor: colorVars["--color-background-surface"],
     pointerEvents: "none",
+    transitionProperty: "top, left, bottom",
+    transitionDuration: MOVE_DURATION,
+    transitionTimingFunction: MOVE_EASING,
   },
   // Cuando no entra abajo (ej. el launcher, pegado al borde inferior), la
   // card se ubica arriba del target y la flecha se da vuelta para seguir
@@ -79,6 +118,9 @@ const styles = stylex.create({
     borderTopStyle: "solid",
     borderTopColor: colorVars["--color-background-surface"],
     pointerEvents: "none",
+    transitionProperty: "top, left, bottom",
+    transitionDuration: MOVE_DURATION,
+    transitionTimingFunction: MOVE_EASING,
   },
   // "Paso X de Y" es información real (en qué paso está el usuario), no
   // contenido deshabilitado — mismo criterio de contraste que el resto.
@@ -243,13 +285,19 @@ export function SpotlightCoachmark({
         style={arrowPositionStyle}
       />
       <div {...stylex.props(styles.card)} style={cardPositionStyle}>
-        <Text type="supporting" as="div" xstyle={styles.step}>
-          Paso {step} de {totalSteps}
-        </Text>
-        <Heading level={3}>{title}</Heading>
-        <Text type="body" color="secondary">
-          {description}
-        </Text>
+        {/* `key` fuerza a React a desmontar y volver a montar este bloque
+            en cada paso, así la animación de fade-in se dispara de nuevo
+            cada vez (si solo cambiara el texto, no habría remount y la
+            animación no se repetiría). */}
+        <div key={targetId} {...stylex.props(styles.content)}>
+          <Text type="supporting" as="div" xstyle={styles.step}>
+            Paso {step} de {totalSteps}
+          </Text>
+          <Heading level={3}>{title}</Heading>
+          <Text type="body" color="secondary">
+            {description}
+          </Text>
+        </div>
         <div {...stylex.props(styles.footer)}>
           <div {...stylex.props(styles.footerLeft)}>
             <button type="button" onClick={onSkip} {...stylex.props(styles.skip)}>

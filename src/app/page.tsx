@@ -10,7 +10,7 @@ import { Collapsible } from "@astryxdesign/core/Collapsible";
 import { Link as AstryxLink } from "@astryxdesign/core/Link";
 import { HomeCampaignCards } from "@/components/product/HomeCampaignCards";
 import { LandingNav } from "@/components/product/LandingNav";
-import { HeroMockup } from "@/components/product/HeroMockup";
+import { HeroImage } from "@/components/product/HeroImage";
 import { LandingFeatures } from "@/components/product/LandingFeatures";
 import { LandingFaq } from "@/components/product/LandingFaq";
 
@@ -91,7 +91,7 @@ export default function Home() {
                 <Heading level={1} type="display-1" justify="center" textWrap="balance">
                   El &quot;por qué&quot; de cada configuración, sin tener que preguntar.
                 </Heading>
-                <Text type="large" color="accent" justify="center">
+                <Text type="large" size="2xl" weight="bold" color="accent" justify="center">
                   Contexto insertado en herramientas heredadas.
                 </Text>
                 <Text type="body" color="secondary" justify="center" xstyle={styles.heroSubtitle}>
@@ -101,7 +101,6 @@ export default function Home() {
                 </Text>
               </Stack>
               <Stack direction="horizontal" gap={3}>
-                <Button href="/flujo-completo" label="Ver demo →" variant="primary" size="lg" />
                 <Button
                   href="#casos-de-ejemplo"
                   label="Ver casos de ejemplo"
@@ -110,7 +109,7 @@ export default function Home() {
                 />
               </Stack>
             </Stack>
-            <HeroMockup />
+            <HeroImage />
           </Stack>
         </Section>
 

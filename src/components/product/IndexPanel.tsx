@@ -127,7 +127,6 @@ const styles = stylex.create({
     fontSize: 11,
     fontWeight: 500,
     fontFamily: "inherit",
-    opacity: { default: 0.45, ":is([data-active=true])": 1 },
   },
   chipDot: {
     width: 6,
@@ -354,6 +353,7 @@ export function IndexPanel({
         <Heading level={2}>Índice de justificaciones</Heading>
         <IconButton
           label="Cerrar"
+          tooltip="Cerrar"
           icon={<span aria-hidden>×</span>}
           variant="ghost"
           size="sm"

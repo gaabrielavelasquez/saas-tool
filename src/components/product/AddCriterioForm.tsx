@@ -96,6 +96,7 @@ export function AddCriterioForm({
         </div>
         <IconButton
           label="Cerrar"
+          tooltip="Cerrar"
           icon={<span aria-hidden>×</span>}
           variant="ghost"
           size="sm"

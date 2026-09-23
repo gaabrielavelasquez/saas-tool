@@ -13,6 +13,10 @@
 
 html {
   height: 100%;
+  /* CTA "Ver casos de ejemplo" del hero: ancla nativa (#casos-de-ejemplo),
+   * sin JS — este scroll-behavior es lo que la hace sentir como un scroll
+   * intencional en vez de un salto brusco. */
+  scroll-behavior: smooth;
 }
 
 html,

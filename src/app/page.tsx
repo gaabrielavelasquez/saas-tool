@@ -8,6 +8,7 @@ import { Section } from "@astryxdesign/core/Section";
 import { Grid } from "@astryxdesign/core/Grid";
 import { Collapsible } from "@astryxdesign/core/Collapsible";
 import { HomeCampaignCards } from "@/components/product/HomeCampaignCards";
+import { InlayMark } from "@/components/product/InlayMark";
 
 const styles = stylex.create({
   page: {
@@ -55,26 +56,6 @@ const referenceScreens = [
   { href: "/indice-sin-resultados-filtro", label: "indice--sin-resultados-filtro" },
   { href: "/indice-cargando", label: "indice--cargando" },
 ];
-
-/** Rombo insertado en un cuadrado — juega con "inlay" (algo incrustado en
- * una superficie). Un solo color (currentColor), hereda el acento del
- * wrapper. */
-function InlayMark() {
-  return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" strokeWidth="1.6" />
-      <rect
-        x="8.4"
-        y="8.4"
-        width="7.2"
-        height="7.2"
-        rx="1.2"
-        fill="currentColor"
-        transform="rotate(45 12 12)"
-      />
-    </svg>
-  );
-}
 
 export default function Home() {
   return (

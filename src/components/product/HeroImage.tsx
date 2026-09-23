@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import * as stylex from "@stylexjs/stylex";
@@ -28,35 +31,38 @@ const styles = stylex.create({
     borderRadius: radiusVars["--radius-container"],
     boxShadow: shadowVars["--shadow-high"],
   },
-  // El halo de blur vive en este wrapper, más grande que el botón
-  // (padding), no en el botón mismo — un backdrop-filter sobre un fondo
-  // ya opaco no se vería. `:hover` acá se dispara tanto al pasar el
-  // mouse por el padding como por el botón hijo (bubbling normal de
-  // :hover hacia ancestros).
-  buttonOverlay: {
+  // Cubre exactamente el área de la imagen (no solo alrededor del
+  // botón) — el blur en hover tiene que verse en todo el fondo, según
+  // feedback. `pointer-events: none` para que no le robe el hover/click
+  // ni a la imagen ni al botón que queda arriba.
+  blurOverlay: {
     position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    padding: 28,
-    borderRadius: 9999,
+    inset: 0,
+    borderRadius: radiusVars["--radius-container"],
+    pointerEvents: "none",
     // StyleX optimiza cualquier "0"/"0px" adentro de blur() a un
     // `blur()` vacío (CSS inválido) — 0.01px es imperceptible pero un
     // valor real, así el navegador tiene desde dónde animar la transición.
     backdropFilter: {
       default: "blur(0.01px)",
-      ":hover": "blur(14px)",
+      ":is([data-hovered=true])": "blur(8px)",
     },
     WebkitBackdropFilter: {
       default: "blur(0.01px)",
-      ":hover": "blur(14px)",
+      ":is([data-hovered=true])": "blur(8px)",
     },
     transitionProperty: "backdrop-filter, -webkit-backdrop-filter",
     transitionDuration: {
-      default: "250ms",
+      default: "300ms",
       "@media (prefers-reduced-motion: reduce)": "0s",
     },
     transitionTimingFunction: "ease-out",
+  },
+  buttonOverlay: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
   },
   button: {
     display: "flex",
@@ -79,11 +85,16 @@ const styles = stylex.create({
 /**
  * Screenshot real del producto, con un único CTA flotando en el centro
  * (mismo patrón que el "Watch a quick demo" de la referencia de Barrie).
- * Reemplaza al mockup armado con componentes en vivo: Gabi prefirió
- * congelarlo como imagen — mismo look, sin la sobrecarga de renderizar
- * FieldRow/FieldDetailCard reales solo para la landing.
+ * Al pasar el mouse por el botón, toda la imagen detrás se desenfoca
+ * sutilmente — no solo el área alrededor del botón. Como StyleX no
+ * soporta selectores de hermano/combinador (`.button:hover ~ .overlay`),
+ * el hover se seguí a mano con estado de React y se expone al overlay
+ * vía `data-hovered`, mismo patrón que `data-active`/`data-open` ya
+ * usado en Launcher/IndexPanel.
  */
 export function HeroImage() {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <Stack xstyle={styles.wrapper}>
       <Image
@@ -94,8 +105,16 @@ export function HeroImage() {
         priority
         {...stylex.props(styles.image)}
       />
+      <div data-hovered={isHovered} {...stylex.props(styles.blurOverlay)} />
       <Stack xstyle={styles.buttonOverlay}>
-        <Link href="/flujo-completo" {...stylex.props(styles.button)}>
+        <Link
+          href="/flujo-completo"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          onFocus={() => setIsHovered(true)}
+          onBlur={() => setIsHovered(false)}
+          {...stylex.props(styles.button)}
+        >
           <ArrowRight size={20} aria-hidden />
           Ver Demo
         </Link>
